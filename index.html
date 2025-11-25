@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Birthday EXP Lane Surprise 🎂💜</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2d1b3a, #5c2e91);
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  #overlay {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(0,0,0,0.7));
+    z-index: 0;
+    pointer-events: none;
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%,100% { background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(0,0,0,0.7)); }
+    50% { background: radial-gradient(circle at center, rgba(255,255,255,0.15), rgba(0,0,0,0.7)); }
+  }
+
+  #loadingScreen {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    z-index: 999;
+    background: radial-gradient(circle at center, #000000, #2d1b3a);
+  }
+
+  #loadingScreen p {
+    margin-top: 15px;
+    font-size: 1.2em;
+  }
+
+  #mainContent {
+    display: none;
+    padding: 20px;
+    animation: fadeIn 1s ease-in-out;
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .messageBox {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    max-width: 450px;
+    margin: 20px auto;
+  }
+
+  .btn {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #a855f7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+
+  #musicControl {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    border: none;
+    font-size: 1.4em;
+    color: #8b5cf6;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+  }
+
+  #musicControl:hover { background: rgba(255,255,255,0.9); }
+
+  @keyframes fall { from { transform: translateY(0); } to { transform: translateY(120vh); opacity: 0; } }
+  @keyframes flyUp { from { transform: translateY(0); } to { transform: translateY(-120vh); opacity: 0; } }
+
+  /* Lapu-Lapu silhouette */
+  .lapu-container { position: relative; width: 180px; height: 240px; margin: 20px auto; }
+  .lapu-body { position: absolute; bottom: 0; width: 60px; height: 120px; background: #3c2a6d; left: 50%; transform: translateX(-50%); border-radius: 10px 10px 4px 4px; }
+  .lapu-head { position: absolute; bottom: 120px; width: 50px; height: 50px; background: #3c2a6d; left: 50%; transform: translateX(-50%); border-radius: 50%; }
+
+  .lapu-headband {
+    position: absolute;
+    bottom: 140px;
+    width: 60px;
+    height: 8px;
+    background: red;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    box-shadow: 0 0 12px #ff0000;
+    animation: glowPulse 1.5s infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    0% { box-shadow: 0 0 5px #ff0000; }
+    50% { box-shadow: 0 0 20px #ff4444; }
+    100% { box-shadow: 0 0 5px #ff0000; }
+  }
+
+  .lapu-sword-left, .lapu-sword-right {
+    position: absolute; bottom: 60px; width: 12px; height: 100px; background: silver; border-radius: 4px;
+  }
+  .lapu-sword-left { left: calc(50% - 35px); transform: rotate(-20deg); }
+  .lapu-sword-right { left: calc(50% + 35px); transform: rotate(20deg); }
+  .lapu-sword-handle-left, .lapu-sword-handle-right {
+    position: absolute; bottom: 50px; width: 20px; height: 10px; background: brown; border-radius: 2px;
+  }
+  .lapu-sword-handle-left { left: calc(50% - 40px); transform: rotate(-20deg); }
+  .lapu-sword-handle-right { left: calc(50% + 30px); transform: rotate(20deg); }
+
+  .lapu-cake { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; background: pink; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div id="overlay"></div>
+
+<!-- Loading Screen with swords -->
+<div id="loadingScreen">
+  <div class="lapu-container">
+    <div class="lapu-sword-left"></div>
+    <div class="lapu-sword-right"></div>
+    <div class="lapu-sword-handle-left"></div>
+    <div class="lapu-sword-handle-right"></div>
+    <div class="lapu-body"></div>
+    <div class="lapu-head"></div>
+    <div class="lapu-headband"></div>
+  </div>
+  <p>Loading Birthday EXP Lane... 🎂🎉</p>
+</div>
+
+<audio id="bgm" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/14/audio_4d25e74c63.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicControl" onclick="toggleMusic()">🔈</button>
+
+<div id="mainContent">
+  <h1>Birthday EXP Lane Surprise 🎂💜</h1>
+  <h2 style="color:#a855f7; font-weight:600; margin-top:10px;">Lapu‑Lapu Main Detected ⚔️🔥</h2>
+
+  <!-- Main page: cake instead of swords -->
+  <div class="lapu-container">
+    <div class="lapu-body"></div>
+    <div class="lapu-head"></div>
+    <div class="lapu-headband"></div>
+    <div class="lapu-cake"></div>
+  </div>
+
+  <p style="font-size:0.9em; color:#d3c0f9; margin-top:10px;">
+    P.S. I tried putting your favorite Lapu‑Lapu picture here, but copyright says no 😭… 
+    So imagine this punch‑bag figure as Lapu‑Lapu, with his swords swapped for a cake! 🎂💜
+  </p>
+
+  <div class="messageBox">
+    <p>Happy Birthday EXP Laner! 🎉🥳</p>
+    <p>Your rotations are clean, your skills are sharp, and your vibes are unbeatable 😭😂</p>
+    <p>If the page lags, blame me… I’m the DARK SYSTEM ⚡</p>
+    <p>Hope your day is full of epic plays, big crits, and even bigger cake slices! 🍰🎂</p>
+  </div>
+
+  <button class="btn" onclick="showGift()">Open Birthday Gift 🎁</button>
+
+  <div id="giftBox" class="messageBox" style="display:none;">
+    <p>🎉 Birthday Surprise! 🎉</p>
+    <p>I wanted to give you something cool but all I had was… this website 😭</p>
+    <p>But hey, at least it doesn’t say "Defeat"… just epic birthday vibes. 🥳✨</p>
+    <p>You’re officially granted a dual‑blade birthday buff! ⚔️💜</p>
+  </div>
+
+  <button id="secretBtn" class="btn" onclick="showSecret()">Secret Birthday EXP Buff ⭐</button>
+</div>
+
+<script>
+const loadingScreen = document.getElementById('loadingScreen');
+const mainContent = document.getElementById('mainContent');
+const bgm = document.getElementById('bgm');
+const musicControl = document.getElementById('musicControl');
+let musicPlaying = false;
+
+window.onload = () => {
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+    mainContent.style.display = 'block';
+  }, 2500);
+}
+
+function startMusic() {
+  if (!musicPlaying) {
+    bgm.volume = 0.4;
+    bgm.play().catch(()=>console.log("Click button to start music"));
+    musicPlaying = true;
+    musicControl.textContent = "🎵";
+  }
+}
+
+function toggleMusic() {
+  if (musicPlaying) {
+    bgm.pause();
+    musicControl.textContent = "🔈";
+  } else {
+    bgm.play();
+    musicControl.textContent = "🎵";
+  }
+  musicPlaying = !musicPlaying;
+}
+
+function showGift() {
+  startMusic();
+  document.getElementById('giftBox').style.display = 'block';
+  confetti();
+  releaseButterflies();
+}
+
+function confetti() {
+  const duration = 1500;
+  const end = Date.now() + duration;
+  (function frame() {
+    const emojis = ["🦋","✨","💜","🎉","⭐","⚔️","🛡️","🍰","🎂"];
+    const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+    const div = document.createElement('div');
+    div.innerHTML = emoji;
+    div.style.position = 'fixed';
+    div.style.left = Math.random()*window.innerWidth + 'px';
+    div.style.top = '-20px';
+    div.style.fontSize = '24px';
+    div.style.animation = 'fall 1.5s linear';
+    document.body.appendChild(div);
+    setTimeout(()=>div.remove(),1600);
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+function releaseButterflies() {
+  for (let i=0;i<15;i++){
+    const b=document.createElement('div');
+    b.textContent='🦋';
+    b.style.position='fixed';
+    b.style.left=Math.random()*window.innerWidth+'px';
+    b.style.bottom='-20px';
+    b.style.fontSize=(Math.random()*20+20)+'px';
+    b.style.animation=`flyUp ${5 + Math.random()*5}s linear`;
+    document.body.appendChild(b);
+    setTimeout(()=>b.remove(),9000);
+  }
+}
+
+function showSecret() {
+  startMusic();
+  alert("✨ Birthday EXP Lane Bonus! +1000 Cuteness +2000 Savage Energy 💥\nKeep slaying lanes and eating cake, king.");
+}
+</script>
+</body>
+</html>
